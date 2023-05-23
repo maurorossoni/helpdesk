@@ -1,7 +1,5 @@
 package com.mauro.helpdesk.resources.exceptions;
 
-import java.time.LocalDateTime;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
