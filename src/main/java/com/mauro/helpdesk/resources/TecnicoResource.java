@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mauro.helpdesk.domain.Tecnico;
 import com.mauro.helpdesk.domain.dtos.TecnicoDTO;
-import com.mauro.helpdesk.services.tecnicoService;
+import com.mauro.helpdesk.services.TecnicoService;
 
 @RestController
 @RequestMapping(value ="/tecnicos")
 public class TecnicoResource {
 	
 	@Autowired 
-	private tecnicoService service;
+	private TecnicoService service;
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<TecnicoDTO> findById(@PathVariable Integer id){
