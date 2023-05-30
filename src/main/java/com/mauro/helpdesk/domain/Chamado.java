@@ -68,7 +68,7 @@ public class Chamado implements Serializable{
 		this.id = id;
 	}
 
-	public LocalDate getDataAbetura() {
+	public LocalDate getDataAbertura() {
 		return dataAbetura;
 	}
 
