@@ -31,7 +31,7 @@ public class ResourceExceptionHandler {
 			HttpServletRequest request) {
 
 		StandardError error = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
-				"Vioalação de Dados", ex.getMessage(), request.getRequestURI());
+				"Violação de Dados", ex.getMessage(), request.getRequestURI());
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 
