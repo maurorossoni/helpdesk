@@ -29,48 +29,52 @@ public class TecnicoService {
 
 	public Tecnico findById(Integer id) {
 		Optional<Tecnico> obj = repository.findById(id);
-		return obj.orElseThrow(() -> new ObjectNotFoundExcepetion("Objeto Não Encontrado! ID:" + id));
+		return obj.orElseThrow(() -> new ObjectNotFoundExcepetion("Objeto não encontrado! Id: " + id));
 	}
 
 	public List<Tecnico> findAll() {
 		return repository.findAll();
 	}
 
-	public Tecnico create(TecnicoDTO objDto) {
-		objDto.setId(null);
-		objDto.setSenha(encoder.encode(objDto.getSenha()));
-		validaPorCpfEEmail(objDto);
-		Tecnico newObj = new Tecnico(objDto);
+	public Tecnico create(TecnicoDTO objDTO) {
+		objDTO.setId(null);
+		objDTO.setSenha(encoder.encode(objDTO.getSenha()));
+		validaPorCpfEEmail(objDTO);
+		Tecnico newObj = new Tecnico(objDTO);
 		return repository.save(newObj);
-
 	}
-
-	public Tecnico update(Integer id, @Valid TecnicoDTO objDto) {
-		objDto.setId(id);
+ 
+	public Tecnico update(Integer id, @Valid TecnicoDTO objDTO) {
+		objDTO.setId(id);
 		Tecnico oldObj = findById(id);
-		validaPorCpfEEmail(objDto);
-		oldObj = new Tecnico(objDto);
+		
+		if(!objDTO.getSenha().equals(oldObj.getSenha())) 
+			objDTO.setSenha(encoder.encode(objDTO.getSenha()));
+		
+		validaPorCpfEEmail(objDTO);
+		oldObj = new Tecnico(objDTO);
 		return repository.save(oldObj);
 	}
 
 	public void delete(Integer id) {
 		Tecnico obj = findById(id);
+
 		if (obj.getChamados().size() > 0) {
-			throw new DataIntegrityViolationException(
-					"Técnico possui ORDEM DE SERVIÇOS atreladas e NÃO PODE SER DELETADO! ");
+			throw new DataIntegrityViolationException("Técnico possui ordens de serviço e não pode ser deletado!");
 		}
+
 		repository.deleteById(id);
 	}
 
-	private void validaPorCpfEEmail(TecnicoDTO objDto) {
-		Optional<Pessoa> obj = pessoaRepository.findByCpf(objDto.getCpf());
-		if (obj.isPresent() && obj.get().getId() != objDto.getId()) {
-			throw new DataIntegrityViolationException("CPF Já cadastrado no sistema!");
+	private void validaPorCpfEEmail(TecnicoDTO objDTO) {
+		Optional<Pessoa> obj = pessoaRepository.findByCpf(objDTO.getCpf());
+		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+			throw new DataIntegrityViolationException("CPF já cadastrado no sistema!");
 		}
 
-		obj = pessoaRepository.findByEmail(objDto.getEmail());
-		if (obj.isPresent() && obj.get().getId() != objDto.getId()) {
-			throw new DataIntegrityViolationException("E-mail Já cadastrado no sistema!");
+		obj = pessoaRepository.findByEmail(objDTO.getEmail());
+		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+			throw new DataIntegrityViolationException("E-mail já cadastrado no sistema!");
 		}
 	}
 
